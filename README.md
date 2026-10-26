@@ -3,7 +3,7 @@
 **Aplicação:** https://jefersonunb.github.io/brasil-1989-2030/  
 **Manual em PDF:** [Brasil_1989-2030_manual_esquerda_governo_e_estrategia.pdf](Brasil_1989-2030_manual_esquerda_governo_e_estrategia.pdf) (134 páginas)
 
-Aplicação web estática que acompanha o manual *Brasil 1989–2030: esquerda, governo e estratégia* (edição ampliada após o 2º turno, outubro de 2026), de Jeferson Martins de Castro e Fernanda Machiner. Todos os números e textos vêm do próprio manual.
+Aplicação web estática que acompanha o manual *Brasil 1989–2030: esquerda, governo e estratégia* (edição ampliada após o 2º turno, outubro de 2026), de Jeferson Martins de Castro, Fernanda Machiner e Maria Eduarda Silva. Todos os números e textos vêm do próprio manual.
 
 ## O que há na aplicação
 

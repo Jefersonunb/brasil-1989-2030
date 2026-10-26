@@ -467,7 +467,7 @@
 
   views.manual = (arg) => {
     const toc = M.parts.map(p => `<div class="p">${p.n ? (typeof p.n === 'string' ? `Anexo ${p.n} · ` : `Parte ${p.n} · `) : ''}${esc(p.title)}</div>` + p.sections.map(s => `<a href="#manual/${s.id}" data-id="${s.id}">${s.num ? `<b>${s.num}</b>` : ''}${esc(s.title)}</a>`).join('')).join('');
-    app.innerHTML = `<h1>${esc(M.title)}</h1><p class="src">${esc(M.subtitle)} · ${esc(M.edition)} · ${M.authors.join(' e ')}</p>
+    app.innerHTML = `<h1>${esc(M.title)}</h1><p class="src">${esc(M.subtitle)} · ${esc(M.edition)} · ${M.authors.slice(0, -1).join(', ')} e ${M.authors.at(-1)}</p>
       <div class="controls"><input id="q" type="search" placeholder="Buscar no manual (ex.: evangélicos, milícias, 40 horas)" style="flex:1;min-width:240px" aria-label="Buscar no manual"></div>
       <div id="res"></div>
       <div class="manual"><aside class="toc">${toc}</aside><article class="doc" id="sec"></article></div>`;
