@@ -66,7 +66,7 @@
     return items;
   }
   function findSection(num) { for (const p of M.parts) for (const s of p.sections) if (s.num === num) return s; return null; }
-  const srcLink = (txt, sec) => `<p class="src">Fonte: ${txt}${sec ? ` · <a href="#manual/${sec}">ver no manual</a>` : ''}</p>`;
+  const srcLink = (txt) => `<p class="src">Fonte: ${txt}</p>`;
 
   /* ---------------- views ---------------- */
   const views = {};
@@ -90,7 +90,7 @@
            ['congresso', 'Calculadora de coalizão', 'Monte maiorias na Câmara e no Senado de 2027'], ['historia', 'Série histórica', 'O PT nas urnas de 1989 a 2026'],
            ['atores', 'Atores e poder', 'Índice de Poder Estratégico e redes'], ['foresight', 'Conjuntura e foresight', 'Forças motrizes, sinais e monitor de cenários'],
            ['politicas', 'Políticas públicas', 'As sete políticas prioritárias em detalhe'], ['metas', 'Metas e riscos', 'Indicadores 2028–2030 e matriz de riscos'],
-           ['ctis', 'CTIS e PICAPS', 'Como a inteligência cooperativa territorial contribui para o plano'], ['manual', 'Manual completo', 'Leitura e busca em todo o documento']]
+           ['ctis', 'CTIS e PICAPS', 'Como a inteligência cooperativa territorial contribui para o plano'], ['documentos', 'Documentos', 'O manual completo em PDF e em Word']]
           .map(([h, t, s]) => `<a class="card" href="#${h}" style="text-decoration:none"><h3 style="margin:0">${t}</h3><div class="src" style="margin:4px 0 0">${s}</div></a>`).join('')}
       </div>
       <h2>Resumo executivo</h2>
@@ -413,7 +413,8 @@
       <div class="doc" style="margin-top:16px">${sep}</div>
       <h2>Agenda para 2027–2030</h2><div class="card">${tableHTML(C.agenda)}</div>
       <h2>Riscos e mitigação</h2><div class="card">${tableHTML(C.riscos)}</div>${srcLink('Seção A.5', 'sA-5')}
-      <h2>Leia o anexo completo</h2><div class="pol-tabs">${C.secoes.filter(id => id !== 'autores').map(id => { const s = sec(id); return `<a class="pill" style="padding:7px 12px;text-decoration:none" href="#manual/${id}">${s.num} · ${esc(s.title)}</a>`; }).join('')}</div>`;
+      <h2>Texto completo do anexo</h2>${C.secoes.filter(id => id !== 'autores').map(id => { const s = sec(id); return `<details class="card anx"><summary><b>${s.num}</b> · ${esc(s.title)}</summary><div class="doc">${s.html}</div></details>`; }).join('')}`;
+    labelTables(app);
     // timeline
     const tl = document.getElementById('tl'), W = cw(tl, 300);
     if (small()) {
@@ -465,30 +466,13 @@
     bindTips(app); sortable(app);
   };
 
-  views.manual = (arg) => {
-    const toc = M.parts.map(p => `<div class="p">${p.n ? (typeof p.n === 'string' ? `Anexo ${p.n} · ` : `Parte ${p.n} · `) : ''}${esc(p.title)}</div>` + p.sections.map(s => `<a href="#manual/${s.id}" data-id="${s.id}">${s.num ? `<b>${s.num}</b>` : ''}${esc(s.title)}</a>`).join('')).join('');
-    app.innerHTML = `<h1>${esc(M.title)}</h1><p class="src">${esc(M.subtitle)} · ${esc(M.edition)} · ${M.authors.slice(0, -1).join(', ')} e ${M.authors.at(-1)}</p>
-      <div class="controls"><input id="q" type="search" placeholder="Buscar no manual (ex.: evangélicos, milícias, 40 horas)" style="flex:1;min-width:240px" aria-label="Buscar no manual"></div>
-      <div id="res"></div>
-      <div class="manual"><aside class="toc">${toc}</aside><article class="doc" id="sec"></article></div>`;
-    const all = M.parts.flatMap(p => p.sections.map(s => ({ ...s, part: p })));
-    function open(id) {
-      const s = all.find(x => x.id === id) || all[0];
-      document.getElementById('sec').innerHTML = `<span class="tag">${s.part.n ? (typeof s.part.n === 'string' ? `Anexo ${s.part.n} · ` : `Parte ${s.part.n} · `) : ''}${esc(s.part.title)}</span><h2>${s.num ? s.num + ' ' : ''}${esc(s.title)}</h2>${s.html}
-        <div class="controls" style="margin-top:20px">${nav(s)}</div>`;
-      labelTables(document.getElementById('sec'));
-      document.querySelectorAll('.toc a').forEach(a => a.classList.toggle('on', a.dataset.id === s.id));
-      const a = document.querySelector(`.toc a[data-id="${s.id}"]`); if (a) a.scrollIntoView({ block: 'nearest' });
-      window.scrollTo({ top: 0 });
-    }
-    function nav(s) { const i = all.indexOf(s); return (i > 0 ? `<a class="pill" href="#manual/${all[i - 1].id}">← ${esc(all[i - 1].title)}</a>` : '') + (i < all.length - 1 ? `<a class="pill" style="margin-left:auto" href="#manual/${all[i + 1].id}">${esc(all[i + 1].title)} →</a>` : ''); }
-    document.getElementById('q').addEventListener('input', e => {
-      const q = e.target.value.trim().toLowerCase(), el = document.getElementById('res');
-      if (q.length < 3) { el.innerHTML = ''; return; }
-      const hits = all.map(s => { const t = s.text.toLowerCase(), i = t.indexOf(q); return i < 0 ? null : { s, n: t.split(q).length - 1, snip: s.text.slice(Math.max(0, i - 80), i + 120) }; }).filter(Boolean).sort((a, b) => b.n - a.n).slice(0, 12);
-      el.innerHTML = `<div class="card" style="margin-bottom:14px"><b>${hits.length ? `${hits.length} seções` : 'Nenhuma seção'}</b> com “${esc(q)}”${hits.map(h => `<p style="margin:8px 0"><a href="#manual/${h.s.id}">${h.s.num} ${esc(h.s.title)}</a> <span class="pill">${h.n}×</span><br><span class="src">…${esc(h.snip).replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), m => `<mark>${m}</mark>`)}…</span></p>`).join('')}</div>`;
-    });
-    open(arg);
+  views.documentos = () => {
+    const DOC = D.documentos;
+    app.innerHTML = `<span class="tag">Consultar</span><h1>Documento de referência</h1>
+      <p class="lead">O manual completo, com todas as partes, figuras, quadros e o anexo sobre o CTIS e a PICAPS. Baixe em PDF para ler ou em Word para editar.</p>
+      <div class="docs">${DOC.map(d => `<article class="dcard"><header><span>${esc(d.eyebrow)}</span><h3>${esc(d.titulo)}</h3></header>
+        <div class="dbody"><p>${esc(d.descricao)}</p><p class="src">${esc(d.autores)} · ${esc(d.edicao)} · ${d.paginas} páginas</p>
+        <div class="dbtn"><a class="btn fill" href="${d.pdf}" download>PDF · ${d.pdfMB}</a><a class="btn line" href="${d.docx}" download>Word · ${d.docxMB}</a></div></div></article>`).join('')}</div>`;
   };
 
   /* ---------------- router ---------------- */
@@ -497,10 +481,9 @@
     const fn = views[v] || views.inicio;
     document.querySelectorAll('.tabs a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + (views[v] ? v : 'inicio')));
     hideTip();
-    if (v === 'manual' && document.getElementById('sec') && arg) { views.manual(arg); }
-    else fn(arg);
+    fn(arg);
     document.querySelector('.tabs').classList.remove('open');
-    if (v !== 'manual' && v !== 'politicas') window.scrollTo({ top: 0 });
+    if (v !== 'politicas') window.scrollTo({ top: 0 });
   }
   document.querySelector('.menu-btn').addEventListener('click', e => { const t = document.querySelector('.tabs'); t.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', t.classList.contains('open')); });
   addEventListener('hashchange', route); route();

@@ -1,7 +1,6 @@
 # Brasil 1989–2030: esquerda, governo e estratégia — aplicação interativa
 
-**Aplicação:** https://jefersonunb.github.io/brasil-1989-2030/  
-**Manual em PDF:** [Brasil_1989-2030_manual_esquerda_governo_e_estrategia.pdf](Brasil_1989-2030_manual_esquerda_governo_e_estrategia.pdf) (134 páginas)
+**Aplicação:** https://jefersonunb.github.io/brasil-1989-2030/ · o manual completo (PDF e Word) está na seção [Documentos](https://jefersonunb.github.io/brasil-1989-2030/#documentos)
 
 Aplicação web estática que acompanha o manual *Brasil 1989–2030: esquerda, governo e estratégia* (edição ampliada após o 2º turno, outubro de 2026), de Jeferson Martins de Castro, Fernanda Machiner e Maria Eduarda Silva. Todos os números e textos vêm do próprio manual.
 
@@ -19,7 +18,7 @@ Aplicação web estática que acompanha o manual *Brasil 1989–2030: esquerda, 
 | Políticas | As sete políticas prioritárias em detalhe | 9.2, Parte 10 |
 | Metas e riscos | Indicadores 2028–2030 e matriz de riscos | 6.4, 11.5, 11.6 |
 | CTIS e PICAPS | Trajetória, matriz de contribuição por eixo, ciclo da inteligência cooperativa, agenda e riscos | Anexo A |
-| Manual | Leitura completa com sumário e busca | Todo o documento |
+| Documentos | O manual completo para baixar em PDF ou Word | Todo o documento |
 
 ## Como publicar no GitHub Pages
 
@@ -46,7 +45,7 @@ assets/figs/          figuras do manual
 data/data.json        dados estruturados extraídos do manual
 data/manual.json      texto integral do manual por parte e seção (HTML e tabelas)
 data/*.js             os mesmos dados, carregáveis sem servidor
-manual.pdf            o manual diagramado
+docs/                 o manual em PDF e em Word
 ```
 
 ## Dados
