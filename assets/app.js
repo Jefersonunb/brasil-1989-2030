@@ -74,10 +74,21 @@
   views.inicio = () => {
     const r = D.resultado, t2 = r.turno2, t1 = r.turno1;
     const resumo = M.parts[0].sections[0];
+    const mapPaths = D.estados.map(e => `<path d="${e.path}" fill="${e.lula2t >= 50 ? (e.lula2t >= 60 ? '#007A2E' : '#3FAE62') : (e.lula2t <= 40 ? '#001F5E' : '#3D5FA8')}"/>`).join('');
     app.innerHTML = `
-      <span class="tag">Edição de outubro de 2026</span>
-      <h1>Depois da virada: governar, articular e preparar 2028 e 2030</h1>
-      <p class="lead">Lula foi reeleito com ${nf(t2.lula.pct, 2)}% dos votos válidos, depois de terminar o 1º turno em segundo lugar. Esta aplicação apresenta os dados do manual sobre o resultado, o novo Congresso, os atores, os cenários e as políticas propostas para 2027–2030.</p>
+      <section class="hero" aria-label="Apresentação">
+        <div class="hero-in">
+          <span class="hero-k">Manual teórico-analítico e guia para a ação · Edição de outubro de 2026</span>
+          <h1 class="hero-t"><span>Diagnóstico</span><span>e estratégia</span><span class="g">para o campo</span><span class="g">democrático</span></h1>
+          <p class="hero-sub"><b>Depois da virada:</b> governar, articular e preparar 2028 e 2030. Lula foi reeleito com ${nf(t2.lula.pct, 2)}% dos votos válidos; esta aplicação reúne os dados, os cenários e as estratégias do manual.</p>
+          <div class="hero-cta"><a class="hbtn fill" href="#res0" id="goRes">Ler o resumo executivo</a><a class="hbtn line" href="#mapa">Explorar o resultado de 2026</a></div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg class="hero-waves" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0 170 C 260 130, 540 200, 800 165 C 960 145, 1090 105, 1200 80 L1200 300 L0 300Z" fill="#FFDF00"/><path d="M0 205 C 300 175, 560 235, 820 200 C 980 180, 1100 150, 1200 128 L1200 300 L0 300Z" fill="#009C3B"/><path d="M0 250 C 330 230, 640 275, 900 248 C 1040 234, 1130 214, 1200 200 L1200 300 L0 300Z" fill="#002776"/></svg>
+          <svg class="hero-map" viewBox="${D.meta.mapViewBox.join(' ')}"><g stroke="#fff" stroke-width="1.4" stroke-linejoin="round">${mapPaths}</g></svg>
+          <span class="hero-year"><small>Brasil</small>1989–2030</span>
+        </div>
+      </section>
       <div class="grid g4" style="margin-top:16px">
         <div class="card kpi g"><div class="n">${nf(t2.lula.pct, 2)}%</div><div class="l">Lula no 2º turno</div><div class="s">${nf(t2.lula.votos)} votos</div></div>
         <div class="card kpi"><div class="n">${nf(t2.diferenca / 1e6, 1)} mi</div><div class="l">de vantagem</div><div class="s">margem superior à de 2022</div></div>
@@ -93,9 +104,10 @@
            ['ctis', 'CTIS e PICAPS', 'Contribuição da inteligência cooperativa territorial ao plano'], ['documentos', 'Documentos', 'O manual completo em PDF e em Word']]
           .map(([h, t, s]) => `<a class="card" href="#${h}" style="text-decoration:none"><h3 style="margin:0">${t}</h3><div class="src" style="margin:4px 0 0">${s}</div></a>`).join('')}
       </div>
-      <h2>Resumo executivo</h2>
+      <h2 id="resH">Resumo executivo</h2>
       <div class="doc" id="res0">${resumo.html}</div>`;
     labelTables(app);
+    document.getElementById('goRes').addEventListener('click', e => { e.preventDefault(); document.getElementById('resH').scrollIntoView({ behavior: 'smooth' }); });
   };
 
   views.mapa = () => {
