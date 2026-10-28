@@ -1,8 +1,8 @@
 # Brasil 1989–2030: esquerda, governo e estratégia — aplicação interativa
 
-**Aplicação:** https://jefersonunb.github.io/brasil-1989-2030/ · o manual completo (PDF e Word) está na seção [Documentos](https://jefersonunb.github.io/brasil-1989-2030/#documentos)
+**Aplicação:** https://jefersonunb.github.io/brasil-1989-2030/ · o manual completo, em PDF e em Word, está na seção [Documentos](https://jefersonunb.github.io/brasil-1989-2030/#documentos)
 
-Aplicação web estática que acompanha o manual *Brasil 1989–2030: esquerda, governo e estratégia* (edição ampliada após o 2º turno, outubro de 2026), de Jeferson Martins de Castro, Fernanda Machiner e Maria Eduarda Silva. Todos os números e textos vêm do próprio manual.
+Aplicação web estática que acompanha o manual *Brasil 1989–2030: esquerda, governo e estratégia* (edição ampliada após o 2º turno, outubro de 2026), de Jeferson Martins de Castro, Fernanda Machiner e Maria Eduarda Silva. Todos os números e textos provêm do manual.
 
 ## O que há na aplicação
 
@@ -14,11 +14,11 @@ Aplicação web estática que acompanha o manual *Brasil 1989–2030: esquerda, 
 | Congresso | Calculadora de coalizão para Câmara e Senado com limiares de votação | 3.2, 9.3 |
 | Série histórica | PT na Presidência, na Câmara e nas prefeituras, 1989–2026 | 2.2, 2.7, 3.2 |
 | Atores | Índice de Poder Estratégico, redes e sociometria | 6.1, 6.2, 7.2 |
-| Conjuntura e foresight | Monitor de sinais que indica o cenário, forças motrizes e sinais fracos | 6.4, 7.3, 7.4, 7.6 |
+| Conjuntura e foresight | Monitor de sinais e cenários, forças motrizes e sinais fracos | 6.4, 7.3, 7.4, 7.6 |
 | Políticas | As sete políticas prioritárias em detalhe | 9.2, Parte 10 |
 | Metas e riscos | Indicadores 2028–2030 e matriz de riscos | 6.4, 11.5, 11.6 |
 | CTIS e PICAPS | Trajetória, matriz de contribuição por eixo, ciclo da inteligência cooperativa, agenda e riscos | Anexo A |
-| Documentos | O manual completo para baixar em PDF ou Word | Todo o documento |
+| Documentos | Manual completo em PDF e em Word | Todo o documento |
 
 ## Como publicar no GitHub Pages
 

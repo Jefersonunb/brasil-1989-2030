@@ -47,13 +47,13 @@
       tb.querySelectorAll('tbody tr').forEach(tr => [...tr.cells].forEach((td, i) => td.setAttribute('data-label', hs[i] || '')));
     });
     root.querySelectorAll('.doc figure img').forEach(img => {
-      img.style.cursor = 'zoom-in'; img.title = 'Toque para ampliar';
+      img.style.cursor = 'zoom-in'; img.title = 'Clique para ampliar';
       img.addEventListener('click', () => openLightbox(img.src, img.closest('figure').querySelector('figcaption')?.textContent || ''));
     });
   }
   function openLightbox(src, cap) {
     const lb = document.createElement('div'); lb.className = 'lightbox';
-    lb.innerHTML = `<button class="lb-close" aria-label="Fechar">✕</button><div class="lb-inner"><img src="${src}" alt=""><p>${esc(cap)}${small() ? " · Arraste para os lados para ver a figura inteira." : ""}</p></div>`;
+    lb.innerHTML = `<button class="lb-close" aria-label="Fechar">✕</button><div class="lb-inner"><img src="${src}" alt=""><p>${esc(cap)}${small() ? " · Deslize lateralmente para ver a figura inteira." : ""}</p></div>`;
     lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb-close')) lb.remove(); });
     addEventListener('keydown', function k(e) { if (e.key === 'Escape') { lb.remove(); removeEventListener('keydown', k); } });
     document.body.appendChild(lb);
@@ -77,20 +77,20 @@
     app.innerHTML = `
       <span class="tag">Edição de outubro de 2026</span>
       <h1>Depois da virada: governar, articular e preparar 2028 e 2030</h1>
-      <p class="lead">Lula foi reeleito com ${nf(t2.lula.pct, 2)}% dos votos válidos, depois de terminar o 1º turno em segundo lugar. Esta aplicação reúne os dados e o texto do manual para explorar o resultado, o novo Congresso, os atores, os cenários e as políticas propostas para 2027–2030.</p>
+      <p class="lead">Lula foi reeleito com ${nf(t2.lula.pct, 2)}% dos votos válidos, depois de terminar o 1º turno em segundo lugar. Esta aplicação apresenta os dados do manual sobre o resultado, o novo Congresso, os atores, os cenários e as políticas propostas para 2027–2030.</p>
       <div class="grid g4" style="margin-top:16px">
         <div class="card kpi g"><div class="n">${nf(t2.lula.pct, 2)}%</div><div class="l">Lula no 2º turno</div><div class="s">${nf(t2.lula.votos)} votos</div></div>
-        <div class="card kpi"><div class="n">${nf(t2.diferenca / 1e6, 1)} mi</div><div class="l">de vantagem</div><div class="s">margem maior que a de 2022</div></div>
+        <div class="card kpi"><div class="n">${nf(t2.diferenca / 1e6, 1)} mi</div><div class="l">de vantagem</div><div class="s">margem superior à de 2022</div></div>
         <div class="card kpi"><div class="n">+${nf(r.ganhoEntreTurnos.lula / 1e6, 1)} mi</div><div class="l">votos de Lula entre os turnos</div><div class="s">Flávio: +${nf(r.ganhoEntreTurnos.flavio / 1e6, 1)} mi</div></div>
         <div class="card kpi"><div class="n">${nf(t2.abstencao, 2)}%</div><div class="l">abstenção no 2º turno</div><div class="s">1º turno: ${nf(t1.abstencao, 2)}%</div></div>
       </div>
-      <h2>Explore</h2>
+      <h2>Módulos</h2>
       <div class="grid g3">
-        ${[['mapa', 'Mapa do 2º turno', 'Estados, regiões, capitais e governadores eleitos'], ['perfil', 'Perfil do voto', 'Onde Lula venceu e perdeu por sexo, renda, religião, raça e região'],
-           ['congresso', 'Calculadora de coalizão', 'Monte maiorias na Câmara e no Senado de 2027'], ['historia', 'Série histórica', 'O PT nas urnas de 1989 a 2026'],
+        ${[['mapa', 'Mapa do 2º turno', 'Estados, regiões, capitais e governadores eleitos'], ['perfil', 'Perfil do voto', 'Desempenho de Lula por sexo, renda, religião, raça e região'],
+           ['congresso', 'Calculadora de coalizão', 'Simulação de maiorias na Câmara e no Senado de 2027'], ['historia', 'Série histórica', 'O PT nas urnas de 1989 a 2026'],
            ['atores', 'Atores e poder', 'Índice de Poder Estratégico e redes'], ['foresight', 'Conjuntura e foresight', 'Forças motrizes, sinais e monitor de cenários'],
            ['politicas', 'Políticas públicas', 'As sete políticas prioritárias em detalhe'], ['metas', 'Metas e riscos', 'Indicadores 2028–2030 e matriz de riscos'],
-           ['ctis', 'CTIS e PICAPS', 'Como a inteligência cooperativa territorial contribui para o plano'], ['documentos', 'Documentos', 'O manual completo em PDF e em Word']]
+           ['ctis', 'CTIS e PICAPS', 'Contribuição da inteligência cooperativa territorial ao plano'], ['documentos', 'Documentos', 'O manual completo em PDF e em Word']]
           .map(([h, t, s]) => `<a class="card" href="#${h}" style="text-decoration:none"><h3 style="margin:0">${t}</h3><div class="src" style="margin:4px 0 0">${s}</div></a>`).join('')}
       </div>
       <h2>Resumo executivo</h2>
@@ -101,7 +101,7 @@
   views.mapa = () => {
     let mode = '2t', region = 'Todas', sel = null;
     app.innerHTML = `<span class="tag">Seção 3.3</span><h1>Mapa do 2º turno de 2026</h1>
-      <p class="lead">Lula venceu em 13 unidades da Federação e virou apenas Minas Gerais. Passe o cursor ou toque num estado para ver os detalhes.</p>
+      <p class="lead">Lula venceu em 13 unidades da Federação e inverteu o resultado do 1º turno apenas em Minas Gerais. Selecione um estado para ver os detalhes.</p>
       <div class="controls">
         <div class="seg" id="mode"><button data-v="2t" class="on">2º turno: % de Lula</button><button data-v="1t">1º turno: vencedor</button><button data-v="gov">Governadores</button></div>
         <select id="reg" aria-label="Região"><option>Todas</option>${['Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul'].map(r => `<option>${r}</option>`).join('')}</select>
@@ -165,10 +165,10 @@
   views.perfil = () => {
     const S = D.segmentos;
     app.innerHTML = `<span class="tag">Seção 3.4</span><h1>Perfil do voto no 2º turno</h1>
-      <p class="lead">Vantagem de Lula sobre Flávio por segmento. Não houve boca de urna; a pesquisa empatava em 50% a 50% e Lula teve 51,8% nas urnas, por isso os recortes indicam direção, e não tamanho exato.</p>
+      <p class="lead">Vantagem de Lula sobre Flávio por segmento. Não houve pesquisa de boca de urna, e a pesquisa Datafolha utilizada apontava empate (50% a 50%), enquanto Lula obteve 51,8% dos votos válidos. Os recortes indicam, portanto, a direção do voto, não sua magnitude exata.</p>
       <div class="controls"><div class="seg" id="vis"><button data-v="margem" class="on">Vantagem (pontos)</button><button data-v="pct">Lula × Flávio (%)</button></div>
       <select id="grp" aria-label="Dimensão"><option value="">Todas as dimensões</option>${S.grupos.map(g => `<option>${g.grupo}</option>`).join('')}</select>
-      <label style="font-size:14px"><input type="checkbox" id="adj"> Ajustar pela diferença entre a pesquisa e o resultado (+1,8 ponto para Lula)</label></div>
+      <label style="font-size:14px"><input type="checkbox" id="adj"> Ajustar pela diferença entre pesquisa e resultado (+1,8 ponto para Lula)</label></div>
       <div class="card"><div id="seg"></div></div>${srcLink(S.fonte, 's3-4')}
       <h2>Segmentos prioritários do plano</h2><div class="card">${tableHTML(D.tabelas.segmentosPrioritarios)}</div>${srcLink('Seção 9.8 do manual', 's9-8')}`;
     let vis = 'margem';
@@ -211,7 +211,7 @@
       ampla: ['PT-PCdoB-PV', 'PSB', 'PSOL-Rede', 'PDT', 'MDB', 'PSD', 'União-PP', 'Republicanos', 'Podemos', 'PSDB-Cidadania', 'Avante', 'PRD-Solidariedade', 'PT', 'Rede', 'PP', 'União', 'PSDB'],
       oposicao: ['PL', 'Novo', 'Missão', 'PP', 'Republicanos'] };
     app.innerHTML = `<span class="tag">Seções 3.2 e 9.3</span><h1>Calculadora de coalizão, 2027</h1>
-      <p class="lead">Marque os partidos para somar cadeiras e ver quais limiares de votação a coalizão alcança. Os presets reproduzem os círculos de coalizão propostos no manual.</p>
+      <p class="lead">Selecione os partidos para somar as cadeiras e verificar quais quóruns de votação a coalizão alcança. Os atalhos reproduzem os círculos de coalizão propostos no manual.</p>
       <div class="controls"><div class="seg" id="casa"><button data-v="camara" class="on">Câmara (513)</button><button data-v="senado">Senado (81)</button></div>
       <div class="seg" id="pre"><button data-v="esquerda">Núcleo de esquerda</button><button data-v="anel">+ MDB e PSD</button><button data-v="ampla">Coalizão ampla</button><button data-v="oposicao">Bloco de direita</button><button data-v="none">Limpar</button></div></div>
       <div class="grid g2"><div class="card" id="plist"></div><div class="card"><div id="tot"></div><div id="bar"></div><div id="thr"></div></div></div>
@@ -241,7 +241,7 @@
   views.historia = () => {
     const H = D.serieHistorica;
     app.innerHTML = `<span class="tag">Seção 3.2</span><h1>O PT nas urnas, 1989–2026</h1>
-      <p class="lead">Escolha a série. O voto presidencial do PT ficou entre 45% e 52% desde 2018, muito acima da força municipal do partido.</p>
+      <p class="lead">Desde 2018, o voto presidencial do PT oscila entre 45% e 52%, patamar muito superior à força municipal do partido.</p>
       <div class="controls"><div class="seg" id="ser"><button data-v="pres" class="on">Presidência (% válidos)</button><button data-v="dep">Deputados federais</button><button data-v="pref">Prefeituras</button></div></div>
       <div class="card"><div id="ch"></div></div>${srcLink('TSE, conforme a Seção 3.2', 's3-2')}
       <h2>Painel por governo</h2><div class="card">${tableHTML(D.tabelas.painelGovernos)}</div>${srcLink('Seção 2.7', 's2-7')}
@@ -277,7 +277,7 @@
   views.atores = () => {
     const A = D.atores; const cols = { progressista: GREEN, conservadora: NAVY, disputa: GOLD };
     app.innerHTML = `<span class="tag">Seções 6.1 e 6.2</span><h1>Atores e recursos de poder</h1>
-      <p class="lead">Índice de Poder Estratégico (governo = 100) dos 16 atores do sistema político nacional, pelo modelo DeepSIC do manual. Filtre por rede.</p>
+      <p class="lead">Índice de Poder Estratégico (governo = 100) dos 16 atores do sistema político nacional, segundo o modelo DeepSIC do manual.</p>
       <div class="controls"><div class="seg" id="rede"><button data-v="" class="on">Todas</button><button data-v="progressista">Progressista</button><button data-v="conservadora">Conservadora</button><button data-v="disputa">Em disputa</button></div></div>
       <div class="grid g2"><div class="card"><div id="ipe"></div></div><div class="card"><h3 style="margin-top:0">Poder ponderado por rede</h3><div id="pie"></div>
       <div class="legend"><span><i style="background:${NAVY}"></i>Conservadora ${nf(A.redes.conservadora, 1)}%</span><span><i style="background:${GREEN}"></i>Progressista ${nf(A.redes.progressista, 1)}%</span><span><i style="background:${GOLD}"></i>Em disputa ${nf(A.redes.disputa, 1)}%</span></div></div></div>
@@ -302,7 +302,7 @@
   views.foresight = () => {
     const C = D.tabelas.cenarios;
     app.innerHTML = `<span class="tag">Parte 7 e Seção 6.4</span><h1>Conjuntura e foresight</h1>
-      <p class="lead">Use o monitor para testar em que cenário o país estaria a partir dos sinais de alerta definidos no manual. Os limiares vêm da Seção 6.4; os cenários, da Seção 7.6.</p>
+      <p class="lead">O monitor indica o cenário compatível com os valores informados para os sinais de alerta. Os limiares são os da Seção 6.4; os cenários, os da Seção 7.6.</p>
       <div class="grid g2">
         <div class="card"><h3 style="margin-top:0">Monitor de sinais</h3>
           <label>Brent (US$ por barril): <b id="vb"></b><br><input id="brent" type="range" min="60" max="160" value="116" style="width:100%"></label>
@@ -323,7 +323,7 @@
       const choque = v.brent > 120 || v.inf > 8 || v.apr < 30; const org = v.org && v.vit >= 70 && !v.stf;
       const al = [];
       if (v.brent > 120) al.push('Brent acima de US$ 120: choque de energia'); if (v.inf > 8) al.push('Inflação de alimentos acima de 8%');
-      if (v.vit < 70) al.push('Coalizão abaixo de 70% de vitórias'); if (v.apr < 30) al.push('Aprovação abaixo de 30%'); if (v.stf) al.push('Crise institucional no Senado');
+      if (v.vit < 70) al.push('Coalizão abaixo de 70% de vitórias'); if (v.apr < 30) al.push('Aprovação abaixo de 30%'); if (v.stf) al.push('Impeachment de ministro do STF pautado no Senado');
       document.getElementById('alerts').innerHTML = al.length ? al.map(a => `<p style="margin:4px 0"><span class="status no">!</span> ${a}</p>`).join('') : '<p class="ok"><b>Nenhum limiar de alerta ultrapassado.</b></p>';
       const name = !choque && org ? 'Reconstrução' : choque && org ? 'Resistência organizada' : !choque && !org ? 'Governo refém' : 'Restauração';
       document.getElementById('scen').innerHTML = C.rows.map(r => `<div class="scen ${r[0] === name ? 'on' : ''}"><h3>${md(r[0])}${r[0] === name ? ' <span class="pill">cenário indicado</span>' : ''}</h3><p style="font-size:14px">${md(r[1])}</p><p class="src"><b>Sinais:</b> ${md(r[2])}</p><p class="src"><b>Estratégia:</b> ${md(r[3])}</p></div>`).join('');
@@ -364,7 +364,7 @@
   views.politicas = (arg) => {
     const P = D.politicas; let cur = P.find(p => p.id === arg) || P[0];
     app.innerHTML = `<span class="tag">Parte 10</span><h1>As sete políticas prioritárias</h1>
-      <p class="lead">Cada política tem diagnóstico, instrumentos, metas, atores, riscos e comunicação. Escolha uma para ver o detalhamento completo do manual.</p>
+      <p class="lead">Cada política é apresentada com diagnóstico, instrumentos, metas, atores, riscos e comunicação, conforme o manual.</p>
       <div class="pol-tabs" id="pt">${P.map(p => `<button data-id="${p.id}">${p.num} · ${p.titulo.split(':')[0]}</button>`).join('')}</div><div id="pd"></div>
       <h2>Agenda de políticas públicas (síntese)</h2><div class="card">${tableHTML(D.tabelas.agenda)}</div>${srcLink('Seção 9.2', 's9-2')}`;
     function draw() {
@@ -382,9 +382,9 @@
     const cells = {}; R.rows.forEach(r => { const k = lv[r[1]] + '-' + lv[r[2]]; (cells[k] = cells[k] || []).push(r[0]); });
     const shade = (p, i) => ['#E5F4E9', '#FFF6C7', '#F9E4E4'][Math.min(2, Math.floor((p + i) / 1.5))];
     let grid = '<div></div><div class="h">Impacto baixo</div><div class="h">Impacto médio</div><div class="h">Impacto alto</div>';
-    [2, 1, 0].forEach(p => { grid += `<div class="h">Probab. ${['baixa', 'média', 'alta'][p]}</div>`; [0, 1, 2].forEach(i => { grid += `<div class="cell" style="background:${shade(p, i)}">${(cells[p + '-' + i] || []).map(t => `<span>${md(t)}</span>`).join('')}</div>`; }); });
+    [2, 1, 0].forEach(p => { grid += `<div class="h">Probabilidade ${['baixa', 'média', 'alta'][p]}</div>`; [0, 1, 2].forEach(i => { grid += `<div class="cell" style="background:${shade(p, i)}">${(cells[p + '-' + i] || []).map(t => `<span>${md(t)}</span>`).join('')}</div>`; }); });
     app.innerHTML = `<span class="tag">Seções 11.5 e 11.6</span><h1>Metas e riscos</h1>
-      <p class="lead">Indicadores com linha de base e metas para 2028 e 2030, e a matriz de riscos do plano. Clique nos cabeçalhos para ordenar.</p>
+      <p class="lead">Indicadores com linha de base e metas para 2028 e 2030, e matriz de riscos do plano. As tabelas podem ser ordenadas pelos cabeçalhos.</p>
       <h2>Indicadores</h2><div class="card">${tableHTML(D.tabelas.indicadores)}</div>${srcLink('Seção 11.5', 's11-5')}
       <h2>Matriz de riscos</h2><div class="card"><div class="riskgrid">${grid}</div></div>
       <div class="card" style="margin-top:14px">${tableHTML(R)}</div>${srcLink('Seção 11.6', 's11-6')}
@@ -400,11 +400,11 @@
       <div class="lead">${lead}</div>
       <h2>Trajetória, 2017–2026</h2><div class="card"><div id="tl"></div></div>
       <div class="grid g2" style="margin-top:16px">
-        <div class="card"><h3 style="margin-top:0">PICAPS</h3><p>Plataforma de Inteligência Cooperativa com a Atenção Primária à Saúde, lançada em 29 de abril de 2020 pela Fiocruz Brasília e pela UnB, com a Secretaria de Saúde do DF, e formalizada pelo Acordo de Cooperação 70/2020. Começou atendendo cerca de 180 residentes da Escola de Governo Fiocruz Brasília em 182 unidades básicas de saúde. Quatro eixos: Radar de Territórios, teleorientação, inteligência epidemiológica e transformação digital. Desde 2025 é implementada com o Ministério da Saúde.</p></div>
+        <div class="card"><h3 style="margin-top:0">PICAPS</h3><p>Plataforma de Inteligência Cooperativa com a Atenção Primária à Saúde, lançada em 29 de abril de 2020 pela Fiocruz Brasília e pela UnB, com a Secretaria de Saúde do DF, e formalizada pelo Acordo de Cooperação 70/2020. Atendeu inicialmente cerca de 180 residentes da Escola de Governo Fiocruz Brasília em 182 unidades básicas de saúde. Organiza-se em quatro eixos: Radar de Territórios, teleorientação, inteligência epidemiológica e transformação digital. Desde 2025, é implementada com o Ministério da Saúde.</p></div>
         <div class="card"><h3 style="margin-top:0">CTIS</h3><p>Colaboratório de Ciência, Tecnologia, Inovação e Sociedade da Fiocruz Brasília (antes Colaboratório de Ciência, Tecnologia e Sociedade, onde a PICAPS foi concebida em 2017), um "laboratório sem paredes" que integra políticas públicas a partir de projetos territoriais, orientado pela Agenda 2030 (ODS 3, 10 e 11), com ações no DF, na UFAL, no Paraná e na Colômbia.</p></div>
       </div>
       <h2>Onde mais contribuem para o plano</h2>
-      <p class="src" style="margin-top:0">Toque numa linha para ver o instrumento, o produto e o indicador daquele eixo.</p>
+      <p class="src" style="margin-top:0">Selecione uma linha para ver o instrumento, o produto e o indicador de cada eixo.</p>
       <div class="card"><div id="mx"></div><p class="src mxleg">Intensidade: ● baixa · ●● média · ●●● alta</p><div id="mxd" class="hl" style="margin-top:12px"></div></div>
       ${srcLink('Avaliação qualitativa do manual, Seção A.3', 'sA-3')}
       <h2>O ciclo da inteligência cooperativa</h2>
@@ -471,7 +471,7 @@
   views.documentos = () => {
     const DOC = D.documentos;
     app.innerHTML = `<span class="tag">Consultar</span><h1>Documento de referência</h1>
-      <p class="lead">O manual completo, com todas as partes, figuras, quadros e o anexo sobre o CTIS e a PICAPS. Baixe em PDF para ler ou em Word para editar.</p>
+      <p class="lead">Versão integral do manual, com todas as partes, figuras, quadros e o anexo sobre o CTIS e a PICAPS, disponível em PDF, para leitura, e em Word, para edição.</p>
       <div class="docs">${DOC.map(d => `<article class="dcard"><header><span>${esc(d.eyebrow)}</span><h3>${esc(d.titulo)}</h3></header>
         <div class="dbody"><p>${esc(d.descricao)}</p><p class="src">${esc(d.autores)} · ${esc(d.edicao)} · ${d.paginas} páginas</p>
         <div class="dbtn"><a class="btn fill" href="${d.pdf}" download>PDF · ${d.pdfMB}</a><a class="btn line" href="${d.docx}" download>Word · ${d.docxMB}</a></div></div></article>`).join('')}</div>`;
