@@ -481,13 +481,15 @@
   function route() {
     const [v, arg] = (location.hash.slice(1) || 'inicio').split('/');
     const fn = views[v] || views.inicio;
-    document.querySelectorAll('.tabs a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + (views[v] ? v : 'inicio')));
+    document.querySelectorAll('.sidebar a, .top-docs').forEach(a => { const on = a.getAttribute('href') === '#' + (views[v] ? v : 'inicio'); a.classList.toggle('on', on); on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'); });
     hideTip();
     fn(arg);
-    document.querySelector('.tabs').classList.remove('open');
+    document.body.classList.remove('nav-open'); document.querySelector('.menu-btn').setAttribute('aria-expanded', 'false');
     if (v !== 'politicas') window.scrollTo({ top: 0 });
   }
-  document.querySelector('.menu-btn').addEventListener('click', e => { const t = document.querySelector('.tabs'); t.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', t.classList.contains('open')); });
+  document.querySelector('.menu-btn').addEventListener('click', e => { const o = document.body.classList.toggle('nav-open'); e.currentTarget.setAttribute('aria-expanded', o); });
+  document.querySelector('.scrim').addEventListener('click', () => { document.body.classList.remove('nav-open'); document.querySelector('.menu-btn').setAttribute('aria-expanded', 'false'); });
+  addEventListener('keydown', e => { if (e.key === 'Escape') document.body.classList.remove('nav-open'); });
   addEventListener('hashchange', route); route();
   let rw = innerWidth, rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (Math.abs(innerWidth - rw) > 40) { rw = innerWidth; route(); } }, 250); });
 })();

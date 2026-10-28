@@ -9,31 +9,42 @@
 </head>
 <body>
 <header class="top">
+  <button class="menu-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="sidebar"><span></span><span></span><span></span></button>
   <div class="brand">
     <span class="kick">Manual teórico-analítico e guia para a ação</span>
     <a href="#inicio" class="title">Brasil 1989–2030 <span>· esquerda, governo e estratégia</span></a>
   </div>
-  <button class="menu-btn" aria-label="Abrir menu" aria-expanded="false">☰</button>
-  <nav class="tabs" aria-label="Seções">
-    <a href="#inicio">Início</a>
-    <a href="#mapa">Mapa 2026</a>
-    <a href="#perfil">Perfil do voto</a>
-    <a href="#congresso">Congresso</a>
-    <a href="#historia">Série histórica</a>
-    <a href="#atores">Atores</a>
-    <a href="#foresight">Conjuntura e foresight</a>
-    <a href="#politicas">Políticas</a>
-    <a href="#metas">Metas e riscos</a>
-    <a href="#ctis">CTIS e PICAPS</a>
-    <a href="#documentos" class="docs-tab">Documentos</a>
-  </nav>
+  <a href="#documentos" class="top-docs">Documentos</a>
 </header>
 <div class="stripe"><i></i><i></i><i></i></div>
-<main id="app" tabindex="-1"></main>
+<div class="shell">
+  <nav class="sidebar tabs" id="sidebar" aria-label="Módulos da aplicação">
+    <div class="nav-g">Apresentação</div>
+    <a href="#inicio"><span class="k">··</span><span>Início</span></a>
+    <div class="nav-g">Resultado de 2026</div>
+    <a href="#mapa"><span class="k">01</span><span>Mapa 2026</span></a>
+    <a href="#perfil"><span class="k">02</span><span>Perfil do voto</span></a>
+    <a href="#congresso"><span class="k">03</span><span>Congresso</span></a>
+    <div class="nav-g">Análise</div>
+    <a href="#historia"><span class="k">04</span><span>Série histórica</span></a>
+    <a href="#atores"><span class="k">05</span><span>Atores</span></a>
+    <a href="#foresight"><span class="k">06</span><span>Conjuntura e foresight</span></a>
+    <div class="nav-g">Estratégia</div>
+    <a href="#politicas"><span class="k">07</span><span>Políticas</span></a>
+    <a href="#metas"><span class="k">08</span><span>Metas e riscos</span></a>
+    <a href="#ctis"><span class="k">09</span><span>CTIS e PICAPS</span></a>
+    <div class="nav-g">Consultar</div>
+    <a href="#documentos"><span class="k">10</span><span>Documentos</span></a>
+  </nav>
+  <div class="scrim" aria-hidden="true"></div>
+  <div class="content">
+    <main id="app" tabindex="-1"></main>
+    <footer class="foot">
+      <p>Dados e textos extraídos do manual <em>Brasil 1989–2030: esquerda, governo e estratégia</em> (edição ampliada, outubro de 2026), de Jeferson Martins de Castro, Fernanda Machiner e Maria Eduarda Silva. Cada módulo indica a seção do manual de onde vêm os números. Dados em <a href="data/data.json">JSON</a>.</p>
+    </footer>
+  </div>
+</div>
 <div id="tip" class="tip" role="tooltip"></div>
-<footer class="foot">
-  <p>Dados e textos extraídos do manual <em>Brasil 1989–2030: esquerda, governo e estratégia</em> (edição ampliada, outubro de 2026), de Jeferson Martins de Castro, Fernanda Machiner e Maria Eduarda Silva. Cada módulo indica a seção do manual de onde vêm os números. Dados em <a href="data/data.json">JSON</a>.</p>
-</footer>
 <script src="data/data.js"></script>
 <script src="data/manual.js"></script>
 <script src="assets/app.js"></script>
