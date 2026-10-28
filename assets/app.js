@@ -395,7 +395,7 @@
   views.ctis = () => {
     const C = D.ctis, sec = id => { for (const p of M.parts) for (const s of p.sections) if (s.id === id) return s; return null; };
     const a1 = sec('sA-1'), sep = (sec('sA-2').html.match(/<div class="box y">[\s\S]*?<\/div>/) || [''])[0];
-    const lead = (a1.html.split('</p>')[0] + '</p>'), nota = (a1.html.match(/<div class="box y">[\s\S]*?<\/div>/) || [''])[0];
+    const lead = (a1.html.split('</p>')[0] + '</p>');
     app.innerHTML = `<span class="tag">Anexo A</span><h1>CTIS e PICAPS: inteligência cooperativa territorial</h1>
       <div class="lead">${lead}</div>
       <h2>Trajetória, 2017–2026</h2><div class="card"><div id="tl"></div></div>
@@ -403,7 +403,6 @@
         <div class="card"><h3 style="margin-top:0">PICAPS</h3><p>Plataforma de Inteligência Cooperativa com a Atenção Primária à Saúde, lançada em 29 de abril de 2020 pela Fiocruz Brasília e pela UnB, com a Secretaria de Saúde do DF, e formalizada pelo Acordo de Cooperação 70/2020. Começou atendendo cerca de 180 residentes da Escola de Governo Fiocruz Brasília em 182 unidades básicas de saúde. Quatro eixos: Radar de Territórios, teleorientação, inteligência epidemiológica e transformação digital. Desde 2025 é implementada com o Ministério da Saúde.</p></div>
         <div class="card"><h3 style="margin-top:0">CTIS</h3><p>Colaboratório de Ciência, Tecnologia, Inovação e Sociedade da Fiocruz Brasília (antes Colaboratório de Ciência, Tecnologia e Sociedade, onde a PICAPS foi concebida em 2017), um "laboratório sem paredes" que integra políticas públicas a partir de projetos territoriais, orientado pela Agenda 2030 (ODS 3, 10 e 11), com ações no DF, na UFAL, no Paraná e na Colômbia.</p></div>
       </div>
-      <div class="doc" style="margin-top:16px">${nota}</div>
       <h2>Onde mais contribuem para o plano</h2>
       <p class="src" style="margin-top:0">Toque numa linha para ver o instrumento, o produto e o indicador daquele eixo.</p>
       <div class="card"><div id="mx"></div><p class="src mxleg">Intensidade: ● baixa · ●● média · ●●● alta</p><div id="mxd" class="hl" style="margin-top:12px"></div></div>
@@ -414,12 +413,27 @@
       <div class="doc" style="margin-top:16px">${sep}</div>
       <h2>Agenda para 2027–2030</h2><div class="card">${tableHTML(C.agenda)}</div>
       <h2>Riscos e mitigação</h2><div class="card">${tableHTML(C.riscos)}</div>${srcLink('Seção A.5', 'sA-5')}
-      <h2>Texto completo do anexo</h2>${C.secoes.filter(id => id !== 'autores').map(id => { const s = sec(id); return `<details class="card anx"><summary><b>${s.num}</b> · ${esc(s.title)}</summary><div class="doc">${s.html}</div></details>`; }).join('')}`;
+      <h2>Texto completo do anexo</h2>${C.secoes.filter(id => id !== 'autores').map(id => { const s = sec(id); return `<details class="card anx"><summary><b>${s.num}</b> · ${esc(s.title)}</summary><div class="doc">${s.html.replace(/<div class="box y"><p><strong>Nota sobre o alcance[\s\S]*?<\/div>/, '')}</div></details>`; }).join('')}`;
     labelTables(app);
     // timeline
-    const tl = document.getElementById('tl');
-    tl.innerHTML = `<ol class="vtl">${C.eventos.map(e => `<li><b>${esc(e.data)}</b> · ${esc(e.titulo)}<br><span class="src">${esc(e.detalhe)}</span></li>`).join('')}</ol>
-      <p class="src" style="margin-top:10px">Fontes: Martins e coautores (Ciência & Saúde Coletiva, 2024), Microsoft News Center (6/2020), Arca Fiocruz, Conselho de Saúde do DF (Ofício 68/2020), UnB Notícias (5/2022), Portaria GEREB 030/2024, Radis n. 268 (2025), Fiocruz (2025).</p>`;
+    const tl = document.getElementById('tl'), W = cw(tl, 300), EV = C.eventos, FT = `<p class="src" style="margin-top:10px">Fontes: Martins e coautores (Ciência & Saúde Coletiva, 2024), Microsoft News Center (6/2020), Arca Fiocruz, Conselho de Saúde do DF (Ofício 68/2020), UnB Notícias (5/2022), Portaria GEREB 030/2024, Radis n. 268 (2025), Fiocruz (2025).</p>`;
+    if (small()) {
+      tl.innerHTML = `<ol class="vtl">${EV.map(e => `<li><b>${esc(e.data)}</b> · ${esc(e.titulo)}<br><span class="src">${esc(e.detalhe)}</span></li>`).join('')}</ol>${FT}`;
+    } else {
+      const n = EV.length, pad = Math.min(105, W / 9), X = i => pad + i * (W - 2 * pad) / (n - 1), wrap = (t, m) => { const out = []; let c = ''; t.split(' ').forEach(w => { if ((c + ' ' + w).trim().length > m) { out.push(c.trim()); c = w; } else c += ' ' + w; }); out.push(c.trim()); return out; };
+      const m = Math.max(16, Math.floor((2 * (W - 2 * pad) / (n - 1)) / 6.6)), Y0 = 210, H = 420;
+      let g = `<line x1="20" x2="${W - 20}" y1="${Y0}" y2="${Y0}" stroke="${css('--navy')}" stroke-width="3"/>`;
+      EV.forEach((e, i) => {
+        const up = i % 2 === 0, x = X(i), last = i === n - 1;
+        const tit = wrap(e.titulo, m), det = wrap(e.detalhe, m + 2), L = [[e.data, 'd'], ...tit.map(t => [t, 't']), ...det.map(t => [t, 's'])];
+        const lh = 14, stemEnd = up ? Y0 - 26 : Y0 + 26, y1 = up ? stemEnd - 6 - (L.length - 1) * lh : stemEnd + 16;
+        g += `<line x1="${x}" x2="${x}" y1="${Y0}" y2="${stemEnd}" stroke="${GREY}"/><circle cx="${x}" cy="${Y0}" r="6.5" fill="${last ? GREEN : css('--navy')}" data-tip="<b>${esc(e.data)} · ${esc(e.titulo)}</b><br>${esc(e.detalhe)}" tabindex="0"/>`;
+        g += `<text x="${x}" y="${y1}" text-anchor="middle">${L.map(([t, k], j) => `<tspan x="${x}" dy="${j ? lh : 0}" font-size="${k === 'd' ? 12 : 11.5}" font-weight="${k === 's' ? 400 : 700}" fill="${k === 'd' ? GREEN : k === 's' ? css('--muted') : css('--navy')}">${esc(t)}</tspan>`).join('')}</text>`;
+      });
+      tl.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Linha do tempo do CTIS e da PICAPS">${g}</svg>${FT}`;
+      const sv = tl.querySelector('svg'), bb = sv.getBBox(), top = Math.floor(bb.y) - 8, hh = Math.ceil(bb.height) + 16;
+      sv.setAttribute('viewBox', `0 ${top} ${W} ${hh}`);
+    }
     // matrix
     const mx = document.getElementById('mx'), lvl = small() ? ['–', '●', '●●', '●●●'] : ['—', 'baixa', 'média', 'alta'], col = ['var(--line)', '#C9D3E8', '#5B7BC0', '#002776'];
     mx.innerHTML = `<div class="mxs"><table class="mxt"><thead><tr><th>Eixo do plano</th>${C.capacidades.map(c => `<th class="c">${esc(c)}</th>`).join('')}</tr></thead><tbody>${C.eixos.map((e, i) => `<tr data-i="${i}" tabindex="0"><td>${esc(e)}</td>${C.matriz[i].map(v => `<td class="c" style="background:${col[v]};color:${v >= 2 ? '#fff' : 'var(--navy)'}" data-label="">${lvl[v]}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
