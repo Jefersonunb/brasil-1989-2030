@@ -395,14 +395,15 @@
   views.ctis = () => {
     const C = D.ctis, sec = id => { for (const p of M.parts) for (const s of p.sections) if (s.id === id) return s; return null; };
     const a1 = sec('sA-1'), sep = (sec('sA-2').html.match(/<div class="box y">[\s\S]*?<\/div>/) || [''])[0];
-    const lead = (a1.html.split('</p>')[0] + '</p>');
+    const lead = (a1.html.split('</p>')[0] + '</p>'), nota = (a1.html.match(/<div class="box y">[\s\S]*?<\/div>/) || [''])[0];
     app.innerHTML = `<span class="tag">Anexo A</span><h1>CTIS e PICAPS: inteligência cooperativa territorial</h1>
       <div class="lead">${lead}</div>
-      <h2>Trajetória, 2020–2026</h2><div class="card"><div id="tl"></div></div>
+      <h2>Trajetória, 2017–2026</h2><div class="card"><div id="tl"></div></div>
       <div class="grid g2" style="margin-top:16px">
-        <div class="card"><h3 style="margin-top:0">PICAPS</h3><p>Plataforma de Inteligência Cooperativa com a Atenção Primária à Saúde, criada em 2020 pela Fiocruz Brasília e pela UnB. Quatro eixos: Radar de Territórios, teleorientação, inteligência epidemiológica e transformação digital. Em 2022 apoiava mais de 32,5 mil gestores e profissionais da atenção primária.</p></div>
-        <div class="card"><h3 style="margin-top:0">CTIS</h3><p>CoLaboratório de Ciência, Tecnologia, Inovação e Sociedade da Fiocruz Brasília, um "laboratório sem paredes" que integra políticas públicas a partir de projetos territoriais, orientado pela Agenda 2030 (ODS 3, 10 e 11), com ações no DF, na UFAL, no Paraná e na Colômbia.</p></div>
+        <div class="card"><h3 style="margin-top:0">PICAPS</h3><p>Plataforma de Inteligência Cooperativa com a Atenção Primária à Saúde, lançada em 29 de abril de 2020 pela Fiocruz Brasília e pela UnB, com a Secretaria de Saúde do DF, e formalizada pelo Acordo de Cooperação 70/2020. Começou atendendo cerca de 180 residentes da Escola de Governo Fiocruz Brasília em 182 unidades básicas de saúde. Quatro eixos: Radar de Territórios, teleorientação, inteligência epidemiológica e transformação digital. Desde 2025 é implementada com o Ministério da Saúde.</p></div>
+        <div class="card"><h3 style="margin-top:0">CTIS</h3><p>Colaboratório de Ciência, Tecnologia, Inovação e Sociedade da Fiocruz Brasília (antes Colaboratório de Ciência, Tecnologia e Sociedade, onde a PICAPS foi concebida em 2017), um "laboratório sem paredes" que integra políticas públicas a partir de projetos territoriais, orientado pela Agenda 2030 (ODS 3, 10 e 11), com ações no DF, na UFAL, no Paraná e na Colômbia.</p></div>
       </div>
+      <div class="doc" style="margin-top:16px">${nota}</div>
       <h2>Onde mais contribuem para o plano</h2>
       <p class="src" style="margin-top:0">Toque numa linha para ver o instrumento, o produto e o indicador daquele eixo.</p>
       <div class="card"><div id="mx"></div><p class="src mxleg">Intensidade: ● baixa · ●● média · ●●● alta</p><div id="mxd" class="hl" style="margin-top:12px"></div></div>
@@ -416,22 +417,9 @@
       <h2>Texto completo do anexo</h2>${C.secoes.filter(id => id !== 'autores').map(id => { const s = sec(id); return `<details class="card anx"><summary><b>${s.num}</b> · ${esc(s.title)}</summary><div class="doc">${s.html}</div></details>`; }).join('')}`;
     labelTables(app);
     // timeline
-    const tl = document.getElementById('tl'), W = cw(tl, 300);
-    if (small()) {
-      tl.innerHTML = `<ol class="vtl">${C.eventos.map(e => `<li><b>${Math.floor(e.ano)}</b> · ${esc(e.titulo)}<br><span class="src">${esc(e.detalhe)}</span></li>`).join('')}</ol>`;
-    } else {
-      const H = 250, X = y => 30 + (y - 2020) / 6.6 * (W - 60);
-      let g = `<line x1="20" x2="${W - 20}" y1="125" y2="125" stroke="${css('--navy')}" stroke-width="3"/>`;
-      for (let y = 2020; y <= 2026; y++) g += `<text x="${X(y)}" y="145" font-size="11" text-anchor="middle" fill="${css('--muted')}">${y}</text>`;
-      C.eventos.forEach((e, i) => {
-        const up = i % 2 === 0, x = X(e.ano), y1 = up ? 40 : 170;
-        g += `<line x1="${x}" x2="${x}" y1="125" y2="${up ? 92 : 158}" stroke="${GREY}"/><circle cx="${x}" cy="125" r="6" fill="${i === C.eventos.length - 1 ? GREEN : css('--navy')}" data-tip="<b>${esc(e.titulo)}</b><br>${esc(e.detalhe)}" tabindex="0"/>`;
-        const words = e.titulo.split(' '); const lines = []; let cur = '';
-        words.forEach(w => { if ((cur + ' ' + w).trim().length > 22) { lines.push(cur.trim()); cur = w; } else cur += ' ' + w; }); lines.push(cur.trim());
-        g += `<text x="${x}" y="${up ? 88 - (lines.length - 1) * 14 : 176}" font-size="11.5" text-anchor="middle" fill="${css('--ink')}" font-weight="600">${lines.map((l, k) => `<tspan x="${x}" dy="${k ? 14 : 0}">${esc(l)}</tspan>`).join('')}</text>`;
-      });
-      tl.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Linha do tempo">${g}</svg>`;
-    }
+    const tl = document.getElementById('tl');
+    tl.innerHTML = `<ol class="vtl">${C.eventos.map(e => `<li><b>${esc(e.data)}</b> · ${esc(e.titulo)}<br><span class="src">${esc(e.detalhe)}</span></li>`).join('')}</ol>
+      <p class="src" style="margin-top:10px">Fontes: Martins e coautores (Ciência & Saúde Coletiva, 2024), Microsoft News Center (6/2020), Arca Fiocruz, Conselho de Saúde do DF (Ofício 68/2020), UnB Notícias (5/2022), Portaria GEREB 030/2024, Radis n. 268 (2025), Fiocruz (2025).</p>`;
     // matrix
     const mx = document.getElementById('mx'), lvl = small() ? ['–', '●', '●●', '●●●'] : ['—', 'baixa', 'média', 'alta'], col = ['var(--line)', '#C9D3E8', '#5B7BC0', '#002776'];
     mx.innerHTML = `<div class="mxs"><table class="mxt"><thead><tr><th>Eixo do plano</th>${C.capacidades.map(c => `<th class="c">${esc(c)}</th>`).join('')}</tr></thead><tbody>${C.eixos.map((e, i) => `<tr data-i="${i}" tabindex="0"><td>${esc(e)}</td>${C.matriz[i].map(v => `<td class="c" style="background:${col[v]};color:${v >= 2 ? '#fff' : 'var(--navy)'}" data-label="">${lvl[v]}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
