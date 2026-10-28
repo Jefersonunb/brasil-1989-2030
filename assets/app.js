@@ -410,10 +410,9 @@
       <h2>O ciclo da inteligência cooperativa</h2>
       <div class="card"><div id="cy"></div><div id="cyd" class="hl" style="margin-top:10px"></div></div>
       <h2>Por que importa: problemas do diagnóstico e capacidades</h2><div class="card">${tableHTML(C.problemas)}</div>${srcLink('Seção A.2', 'sA-2')}
-      <div class="doc" style="margin-top:16px">${sep}</div>
       <h2>Agenda para 2027–2030</h2><div class="card">${tableHTML(C.agenda)}</div>
       <h2>Riscos e mitigação</h2><div class="card">${tableHTML(C.riscos)}</div>${srcLink('Seção A.5', 'sA-5')}
-      <h2>Texto completo do anexo</h2>${C.secoes.filter(id => id !== 'autores').map(id => { const s = sec(id); return `<details class="card anx"><summary><b>${s.num}</b> · ${esc(s.title)}</summary><div class="doc">${s.html.replace(/<div class="box y"><p><strong>Nota sobre o alcance[\s\S]*?<\/div>/, '')}</div></details>`; }).join('')}`;
+      <h2>Texto completo do anexo</h2>${C.secoes.filter(id => id !== 'autores').map(id => { const s = sec(id); return `<details class="card anx"><summary><b>${s.num}</b> · ${esc(s.title)}</summary><div class="doc">${s.html.replace(/<div class="box y"><p><strong>(Nota sobre o alcance|Regra de separação)[\s\S]*?<\/div>/g, '')}</div></details>`; }).join('')}`;
     labelTables(app);
     // timeline
     const tl = document.getElementById('tl'), W = cw(tl, 300), EV = C.eventos, FT = `<p class="src" style="margin-top:10px">Fontes: Martins e coautores (Ciência & Saúde Coletiva, 2024), Microsoft News Center (6/2020), Arca Fiocruz, Conselho de Saúde do DF (Ofício 68/2020), UnB Notícias (5/2022), Portaria GEREB 030/2024, Radis n. 268 (2025), Fiocruz (2025).</p>`;
