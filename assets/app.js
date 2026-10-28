@@ -456,10 +456,6 @@
     app.innerHTML = `<span class="tag">Anexo A</span><h1>CTIS e PICAPS: inteligência cooperativa territorial</h1>
       <div class="lead">${lead}</div>
       <h2>Trajetória, 2017–2026</h2><div class="card"><div id="tl"></div></div>
-      <div class="grid g2" style="margin-top:16px">
-        <div class="card"><h3 style="margin-top:0">PICAPS</h3><p>Plataforma de Inteligência Cooperativa com a Atenção Primária à Saúde, lançada em 29 de abril de 2020 pela Fiocruz Brasília e pela UnB, com a Secretaria de Saúde do DF, e formalizada pelo Acordo de Cooperação 70/2020. Atendeu inicialmente cerca de 180 residentes da Escola de Governo Fiocruz Brasília em 182 unidades básicas de saúde. Organiza-se em quatro eixos: Radar de Territórios, teleorientação, inteligência epidemiológica e transformação digital. Desde 2025, é implementada com o Ministério da Saúde.</p></div>
-        <div class="card"><h3 style="margin-top:0">CTIS</h3><p>Colaboratório de Ciência, Tecnologia, Inovação e Sociedade da Fiocruz Brasília (antes Colaboratório de Ciência, Tecnologia e Sociedade, onde a PICAPS foi concebida em 2017), um "laboratório sem paredes" que integra políticas públicas a partir de projetos territoriais, orientado pela Agenda 2030.</p></div>
-      </div>
       <h2>Onde mais contribuem para o plano</h2>
       <p class="src" style="margin-top:0">Selecione uma linha para ver o instrumento, o produto e o indicador de cada eixo.</p>
       <div class="card"><div id="mx"></div><p class="src mxleg">Intensidade: ● baixa · ●● média · ●●● alta</p><div id="mxd" class="hl" style="margin-top:12px"></div></div>
