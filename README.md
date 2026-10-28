@@ -1,8 +1,8 @@
-# Brasil 1989–2030: esquerda, governo e estratégia — aplicação interativa
+# Diagnóstico e estratégia para o campo democrático, 1989–2030 — aplicação interativa
 
 **Aplicação:** https://jefersonunb.github.io/brasil-1989-2030/ · o manual completo, em PDF e em Word, está na seção [Documentos](https://jefersonunb.github.io/brasil-1989-2030/#documentos)
 
-Aplicação web estática que acompanha o manual *Brasil 1989–2030: esquerda, governo e estratégia* (edição ampliada após o 2º turno, outubro de 2026), de Jeferson Martins de Castro, Fernanda Machiner e Maria Eduarda Silva. Todos os números e textos provêm do manual.
+Aplicação web estática que acompanha o manual *Manual teórico-analítico e guia para a ação: Diagnóstico e estratégia para o campo democrático, 1989–2030* (edição ampliada após o 2º turno, outubro de 2026), de Jeferson Martins de Castro, Fernanda Machiner e Maria Eduarda Silva. Todos os números e textos provêm do manual.
 
 ## O que há na aplicação
 
@@ -26,7 +26,7 @@ Aplicação web estática que acompanha o manual *Brasil 1989–2030: esquerda, 
 
 1. Crie um repositório no GitHub e envie o conteúdo desta pasta para a raiz do branch `main`:
    ```bash
-   git init && git add . && git commit -m "Aplicação do manual Brasil 1989–2030"
+   git init && git add . && git commit -m "Aplicação do manual"
    git branch -M main
    git remote add origin https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
    git push -u origin main
