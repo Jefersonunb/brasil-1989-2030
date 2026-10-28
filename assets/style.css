@@ -198,3 +198,18 @@ details.anx .doc{margin-top:10px}
   body.nav-open .menu-btn span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 }
 @media (max-width:640px){.top{padding:8px 12px;gap:10px}.top-docs{font-size:12px;padding:4px 10px}.brand .kick{display:none}}
+
+/* Complementos de 28/10/2026: linha do tempo por tipo e matrizes 2×2 */
+#pe li::before{background:var(--dot,var(--navy))}
+#pe li .pill{font-size:11px;padding:1px 7px;margin-left:4px;vertical-align:1px}
+.quad{display:grid;grid-template-columns:28px minmax(0,1fr);gap:6px}
+.quad .qy{display:flex;align-items:center;justify-content:center}
+.quad .qy span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12.5px;color:var(--muted);white-space:nowrap}
+.quad .qx{font-size:12.5px;color:var(--muted);text-align:center}
+.quad .qg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.qc{display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:left;min-height:76px;padding:14px;border-radius:10px;border:2px solid var(--qb);background:var(--qc);cursor:pointer;font:inherit;color:var(--ink)}
+.qc b{font-family:BC;font-size:18px;color:#002776;line-height:1.1}
+.qc .qp{font-size:12.5px;font-weight:600;color:var(--qb)}
+.qc.sel{box-shadow:0 0 0 3px var(--qb) inset}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .qc{color:#1F2635}}
+@media (max-width:640px){.qc{min-height:84px;padding:10px}.qc b{font-size:15.5px}.quad .qy span,.quad .qx{font-size:11px}}

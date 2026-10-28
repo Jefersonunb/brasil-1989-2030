@@ -15,6 +15,8 @@ Aplicação web estática que acompanha o manual *Brasil 1989–2030: esquerda, 
 | Série histórica | PT na Presidência, na Câmara e nas prefeituras, 1989–2026 | 2.2, 2.7, 3.2 |
 | Atores | Índice de Poder Estratégico, redes e sociometria | 6.1, 6.2, 7.2 |
 | Conjuntura e foresight | Monitor de sinais e cenários, forças motrizes e sinais fracos | 6.4, 7.3, 7.4, 7.6 |
+| Geopolítica e soberania | Pressão dos EUA em 2025–2026, cenários do "governo paralelo", ordem global e seções 1.7–1.9, 7.7 e 9.9 | 1.7, 1.8, 1.9, 7.7, 9.9 |
+| Estado, plataformas e método | Patrimonialismo, clientelismo, plataformas, governo digital e ferramentas de análise | 3.8, 5.9, 7.8 |
 | Políticas | As sete políticas prioritárias em detalhe | 9.2, Parte 10 |
 | Metas e riscos | Indicadores 2028–2030 e matriz de riscos | 6.4, 11.5, 11.6 |
 | CTIS e PICAPS | Trajetória, matriz de contribuição por eixo, ciclo da inteligência cooperativa, agenda e riscos | Anexo A |

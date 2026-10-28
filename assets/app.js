@@ -88,7 +88,7 @@
       <div class="grid g3">
         ${[['mapa', 'Mapa do 2º turno', 'Estados, regiões, capitais e governadores eleitos'], ['perfil', 'Perfil do voto', 'Desempenho de Lula por sexo, renda, religião, raça e região'],
            ['congresso', 'Calculadora de coalizão', 'Simulação de maiorias na Câmara e no Senado de 2027'], ['historia', 'Série histórica', 'O PT nas urnas de 1989 a 2026'],
-           ['atores', 'Atores e poder', 'Índice de Poder Estratégico e redes'], ['foresight', 'Conjuntura e foresight', 'Forças motrizes, sinais e monitor de cenários'],
+           ['atores', 'Atores e poder', 'Índice de Poder Estratégico e redes'], ['foresight', 'Conjuntura e foresight', 'Forças motrizes, sinais e monitor de cenários'], ['geopolitica', 'Geopolítica e soberania', 'Doutrina Monroe, pressão dos EUA e o "governo paralelo"'], ['teoria', 'Estado, plataformas e método', 'Patrimonialismo, clientelismo, plataformas e ferramentas de análise'],
            ['politicas', 'Políticas públicas', 'As sete políticas prioritárias em detalhe'], ['metas', 'Metas e riscos', 'Indicadores 2028–2030 e matriz de riscos'],
            ['ctis', 'CTIS e PICAPS', 'Contribuição da inteligência cooperativa territorial ao plano'], ['documentos', 'Documentos', 'O manual completo em PDF e em Word']]
           .map(([h, t, s]) => `<a class="card" href="#${h}" style="text-decoration:none"><h3 style="margin:0">${t}</h3><div class="src" style="margin:4px 0 0">${s}</div></a>`).join('')}
@@ -311,19 +311,20 @@
           <label>Inflação de alimentos em 12 meses (%): <b id="vi"></b><br><input id="inf" type="range" min="0" max="15" step=".5" value="6" style="width:100%"></label>
           <label class="party"><input type="checkbox" id="org"> Metas organizativas em dia (comitês, criadores, lista da sucessão)</label>
           <label class="party"><input type="checkbox" id="stf"> Pedido de impeachment de ministro do STF pautado no Senado</label>
+          <label class="party"><input type="checkbox" id="ext"> Ato formal de governo estrangeiro que reconheça fraude ou autoridade paralela, ou novas sanções ligadas à eleição</label>
           <div id="alerts" style="margin-top:10px"></div></div>
         <div id="scen" class="grid g2" style="align-content:start"></div>
       </div>
       <h2>Forças motrizes: impacto e incerteza</h2><div class="card"><div id="drv"></div></div>${srcLink('Avaliação qualitativa do manual, Seção 7.3', 's7-3')}
       <h2>Sinais fracos e eventos de ruptura</h2><div class="card">${tableHTML(D.tabelas.sinaisFracos)}</div>${srcLink('Seção 7.4', 's7-4')}`;
-    const ids = ['brent', 'apr', 'vit', 'inf', 'org', 'stf'];
+    const ids = ['brent', 'apr', 'vit', 'inf', 'org', 'stf', 'ext'];
     function calc() {
       const v = Object.fromEntries(ids.map(i => [i, document.getElementById(i).type === 'checkbox' ? document.getElementById(i).checked : +document.getElementById(i).value]));
       document.getElementById('vb').textContent = v.brent; document.getElementById('va').textContent = v.apr; document.getElementById('vv').textContent = v.vit; document.getElementById('vi').textContent = nf(v.inf, 1);
-      const choque = v.brent > 120 || v.inf > 8 || v.apr < 30; const org = v.org && v.vit >= 70 && !v.stf;
+      const choque = v.brent > 120 || v.inf > 8 || v.apr < 30 || v.ext; const org = v.org && v.vit >= 70 && !v.stf;
       const al = [];
       if (v.brent > 120) al.push('Brent acima de US$ 120: choque de energia'); if (v.inf > 8) al.push('Inflação de alimentos acima de 8%');
-      if (v.vit < 70) al.push('Coalizão abaixo de 70% de vitórias'); if (v.apr < 30) al.push('Aprovação abaixo de 30%'); if (v.stf) al.push('Impeachment de ministro do STF pautado no Senado');
+      if (v.vit < 70) al.push('Coalizão abaixo de 70% de vitórias'); if (v.apr < 30) al.push('Aprovação abaixo de 30%'); if (v.stf) al.push('Impeachment de ministro do STF pautado no Senado'); if (v.ext) al.push('Ato formal de governo estrangeiro contra o resultado ou novas sanções (Seção 7.7)');
       document.getElementById('alerts').innerHTML = al.length ? al.map(a => `<p style="margin:4px 0"><span class="status no">!</span> ${a}</p>`).join('') : '<p class="ok"><b>Nenhum limiar de alerta ultrapassado.</b></p>';
       const name = !choque && org ? 'Reconstrução' : choque && org ? 'Resistência organizada' : !choque && !org ? 'Governo refém' : 'Restauração';
       document.getElementById('scen').innerHTML = C.rows.map(r => `<div class="scen ${r[0] === name ? 'on' : ''}"><h3>${md(r[0])}${r[0] === name ? ' <span class="pill">cenário indicado</span>' : ''}</h3><p style="font-size:14px">${md(r[1])}</p><p class="src"><b>Sinais:</b> ${md(r[2])}</p><p class="src"><b>Estratégia:</b> ${md(r[3])}</p></div>`).join('');
@@ -359,6 +360,62 @@
     });
     drv.innerHTML = `<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Forças motrizes">${svgc}</svg>`;
     bindTips(app); sortable(app);
+  };
+
+  /* ---------- seções do manual em abas (complementos de 28/10/2026) ---------- */
+  const secById = id => { for (const p of M.parts) for (const x of p.sections) if (x.id === id) return x; return null; };
+  function sectionTabs(el, ids, hashBase, arg) {
+    const L = ids.map(secById).filter(Boolean); let cur = L.find(x => x.id === arg) || L[0];
+    el.innerHTML = `<div class="pol-tabs" role="tablist">${L.map(x => `<button data-id="${x.id}" role="tab">${x.num} · ${esc(x.title.split(':')[0])}</button>`).join('')}</div><div class="secbody"></div>`;
+    function draw() {
+      el.querySelectorAll('.pol-tabs button').forEach(b => { const on = b.dataset.id === cur.id; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+      el.querySelector('.secbody').innerHTML = `<div class="doc"><h2>${cur.num} ${esc(cur.title)}</h2>${cur.html}</div>${srcLink('Seção ' + cur.num + ' do manual')}`;
+      labelTables(el); sortable(el);
+      history.replaceState(null, '', '#' + hashBase + '/' + cur.id);
+    }
+    el.querySelectorAll('.pol-tabs button').forEach(b => b.addEventListener('click', () => { cur = L.find(x => x.id === b.dataset.id); draw(); }));
+    draw();
+  }
+  function quad(el, items, xl, yl, onPick, colors) {
+    el.innerHTML = `<div class="quad"><div class="qy"><span>${esc(yl)}</span></div><div class="qg">${[1, 0].map(y => [0, 1].map(x => { const it = items.find(i => i.x === x && i.y === y), k = items.indexOf(it);
+      return `<button class="qc" data-k="${k}" style="--qc:${colors[x + '' + y][0]};--qb:${colors[x + '' + y][1]}"><b>${it.id ? it.id + ' · ' : ''}${esc(it.nome)}</b>${it.prob ? `<span class="qp">${esc(it.prob)}</span>` : ''}</button>`; }).join('')).join('')}</div><div></div><div class="qx">${esc(xl)}</div></div><div class="hl qd" style="margin-top:12px"></div>`;
+    const d = el.querySelector('.qd');
+    const pick = k => { el.querySelectorAll('.qc').forEach(b => b.classList.toggle('sel', +b.dataset.k === k)); d.innerHTML = onPick(items[k]); };
+    el.querySelectorAll('.qc').forEach(b => b.addEventListener('click', () => pick(+b.dataset.k)));
+    pick(0);
+  }
+
+  views.geopolitica = (arg) => {
+    const G = D.geo, TC = { com: NAVY, jur: '#5B7BC0', seg: '#B4232A', dip: '#7A8699', dis: GOLD, mig: '#8E6BBF', con: GREEN };
+    app.innerHTML = `<span class="tag">Seções 1.7 a 1.9, 7.7 e 9.9</span><h1>Geopolítica e soberania</h1>
+      <p class="lead">A Doutrina Monroe atualizada, a pressão dos EUA sobre o Brasil em 2025–2026, a saída de Flávio Bolsonaro para os EUA e a estratégia do "governo paralelo", o significado da reeleição de Lula e o reordenamento da ordem global.</p>
+      <h2>A pressão dos EUA sobre o Brasil, 2025–2026</h2>
+      <div class="controls" id="tf"><div class="seg"><button data-v="" class="on">Todos</button>${Object.entries(G.tipos).filter(([k]) => G.pressao.some(e => e.tipo === k)).map(([k, v]) => `<button data-v="${k}">${v}</button>`).join('')}</div></div>
+      <div class="card"><ol class="vtl" id="pe"></ol></div>${srcLink('Agência Brasil, CNN Brasil, Folha de S.Paulo, Gazeta do Povo, UOL, Congresso em Foco, Aos Fatos e Jurist (Seção 1.7)')}
+      <h2>O "governo paralelo" nos EUA: quatro cenários</h2>
+      <p class="src" style="margin-top:0">Selecione um cenário para ver os sinais que o indicariam e a resposta proposta.</p>
+      <div class="card" id="gp"></div>${srcLink('Modelo qualitativo do manual, com base nos fatos até 28 de outubro de 2026 (Seções 7.7 e 9.9)')}
+      <h2>A ordem global em 2030</h2>
+      <div class="card" id="og"></div>${srcLink('Seção 1.9')}
+      <h2>Leia as seções</h2><div id="gs"></div>`;
+    const pe = document.getElementById('pe');
+    const drawT = f => { pe.innerHTML = G.pressao.filter(e => !f || e.tipo === f).map(e => `<li style="--dot:${TC[e.tipo]}"><b>${esc(e.data)}</b> · ${esc(e.titulo)} <span class="pill" style="background:${TC[e.tipo]};color:#fff">${esc(G.tipos[e.tipo])}</span><br><span class="src">${esc(e.detalhe)}</span></li>`).join(''); };
+    document.querySelectorAll('#tf button').forEach(b => b.addEventListener('click', () => { document.querySelectorAll('#tf button').forEach(x => x.classList.toggle('on', x === b)); drawT(b.dataset.v); }));
+    drawT('');
+    quad(document.getElementById('gp'), G.cenarios, 'Apoio dos EUA: do retórico ao institucional', 'Adesão da direita doméstica: de baixa a alta',
+      c => `<b style="font-family:BC;font-size:19px;color:var(--navy)">${c.id} · ${esc(c.nome)}</b> <span class="pill">${esc(c.prob)}</span><p style="margin:6px 0 0">${esc(c.descricao)}</p><p style="margin:6px 0 0"><b>Sinais:</b> ${esc(c.sinais)}</p><p style="margin:6px 0 0"><b>Resposta:</b> ${esc(c.resposta)}</p>`,
+      { '00': ['var(--lgreen)', GREEN], '10': ['var(--lblue)', NAVY], '01': ['var(--pale)', GOLD], '11': ['#F9E4E4', '#B4232A'] });
+    quad(document.getElementById('og'), G.ordem, 'Distribuição de poder: de multipolar a concentrada', 'Cooperação entre grandes potências: de baixa a alta',
+      o => `<b style="font-family:BC;font-size:19px;color:var(--navy)">${esc(o.nome)}</b><p style="margin:6px 0 0">${esc(o.descricao)}</p><p style="margin:6px 0 0"><b>Para o Brasil:</b> ${esc(o.brasil)}.</p>`,
+      { '00': ['#F9E4E4', '#B4232A'], '10': ['var(--pale)', GOLD], '01': ['var(--lgreen)', GREEN], '11': ['var(--lblue)', NAVY] });
+    sectionTabs(document.getElementById('gs'), G.secoesGeo, 'geopolitica', arg);
+  };
+
+  views.teoria = (arg) => {
+    app.innerHTML = `<span class="tag">Seções 3.8, 5.9 e 7.8</span><h1>Estado, plataformas e método</h1>
+      <p class="lead">Democracia, burocracia, patrimonialismo e clientelismo; plataformas digitais, governo digital e a sociedade do espetáculo, de Debord e Baudrillard ao capitalismo de vigilância; e ferramentas teórico-metodológicas para a análise de conjuntura social, política, econômica e geopolítica.</p>
+      <div id="ts"></div>`;
+    sectionTabs(document.getElementById('ts'), D.geo.secoesTeoria, 'teoria', arg);
   };
 
   views.politicas = (arg) => {
